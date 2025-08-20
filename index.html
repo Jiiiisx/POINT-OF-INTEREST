@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="Assets/favicon.ico" type="image/x-icon">
+  <title>POINT OF INTEREST AR KLB</title>
+  <link rel="stylesheet" href="modern-design-system.css">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="modal-styles.css" />
+  <link rel="stylesheet" href="add-customer-form-styles.css">
+  <link rel="stylesheet" href="sales-sidebar-styles.css">
+  <link rel="stylesheet" href="login-design-optimized.css">
+  <link rel="stylesheet" href="loading-styles.css">
+  <link rel="stylesheet" href="table-filter-styles.css">
+  <link rel="stylesheet" href="wavy-lines-toggle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Login Container -->
+  <div class="sign-in">
+    <div class="wavy-lines">
+      <svg id="login-wavy-lines" viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;">
+      <path id="line1" />
+      <path id="line2" />
+      <path id="line3" />
+      <path id="line4" />
+      <path id="line5" />
+      <path id="line6" />
+      <path id="line7" />
+      <path id="line8" />
+      <path id="line9" />
+      <path id="line10" />
+      <path id="line11" />
+      <path id="line12" />
+      </svg>
+    </div>
+  <div id="sign-in-container" class="login-container" style="position: relative;">
+    <div class="login-logo" style="position: relative; z-index: 1;">
+      <h1>Welcome To POI AR KLB</h1>
+      <p>Sign in with your Google account to continue</p>
+    </div>
+    <div class="login" style="position: relative; z-index: 1;">
+    <div class="login-form">
+      <div id="g_id_onload"
+           data-client_id="167078370634-de0ou8c3hikdba9pq6evimmfekbkk9o6.apps.googleusercontent.com"
+           data-callback="handleCredentialResponse"
+           data-auto_prompt="false">
+      </div>
+    </div>
+    <div class="privacy" style="position: relative; z-index: 1;">
+      <a href="privacy_policy.html">Privacy And Policy</a>
+      <a href="terms_of_service.html">Terms & Service</a>
+    </div>
+    </div>
+  </div>
+  </div> 
+
+  <!-- Main Content Container -->
+  <div id="main-content" style="display: none;">
+    <div id="errorDisplay"></div>
+    <div id="loadingIndicator" style="display: none;">
+      <div class="spinner"></div>
+      <p>Loading data...</p>
+    </div>
+    <div class="container">
+      <aside class="sidebar" id="sidebar">
+        <div class="logo">
+          <span>Point Of Interest</span>
+        </div>
+        
+        <div class="sidebar-menu">
+          <div class="menu-section">
+            <h3>Dashboard</h3>
+            <ul class="menu-list">
+              <li id="overview-btn" class="active" data-view="overview">
+                <i class="fas fa-home"></i>
+                <span>Overview</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="sales-account">
+          <div class="menu-section">
+            <h3>Sales Team</h3>
+            <div class="sales-list-container">
+              <div class="sales-header">
+                <i class="fas fa-user-tie"></i>
+                <span>Sales Team</span>
+              </div>
+              <ul class="sales-list">
+                <!-- Sales items will be populated dynamically -->
+              </ul>
+            </div>
+          </div>
+          
+          <div class="menu-section">
+            <h3>Account</h3>
+            <ul class="menu-list">
+              <li id="sign-out-button" onclick="handleSignoutClick()" style="display: none;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        </div>
+      </aside>
+      
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+      
+      <main class="main-content">
+        <header class="header">
+          <div class="header-left">
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+              <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-title">
+              <i class="fas fa-chart-dashboard"></i>
+              <h1>Dashboard Monitoring</h1>
+            </div>
+            <p class="header-subtitle">Real-time tracking of sales performance</p>
+          </div>
+        </header>
+        
+        <section class="stats-overview">
+          <div class="stat-card primary">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total Point Of Interest</h3>
+              <div class="stat-number" id="totalPoi">-</div>
+            </div>
+          </div>
+
+          <div class="stat-card primary">
+            <div class="stat-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+              <h3>Total New Interest</h3>
+              <div class="stat-number" id="totalNewInterest">-</div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- Add Customer Form Section -->
+        <section class="add-customer-section" id="add-customer-section" style="display: none;">
+          <div class="section-header">
+            <h3>
+              <i class="fas fa-user-plus"></i>
+              Tambah Calon Pelanggan Baru
+            </h3>
+            <button type="button" class="btn-close-form" id="closeFormBtn">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          
+          <form id="addCustomerForm" class="form-grid">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+              <h5 class="section-title">
+                <i class="fas fa-user"></i>
+                Informasi Pribadi
+              </h5>
+              
+              <div class="form-group">
+                <label for="customerName">
+                  <i class="fas fa-user"></i>
+                  Nama Lengkap *
+                </label>
+                <input type="text" id="customerName" name="nama" required 
+                       placeholder="Masukkan nama lengkap calon pelanggan">
+              </div>
+              
+              <div class="form-group">
+                <label for="customerPhone">
+                  <i class="fas fa-phone"></i>
+                  No Telepon *
+                </label>
+                <input type="tel" id="customerPhone" name="no_telepon" required 
+                       placeholder="Contoh: 081234567890" 
+                       pattern="[0-9]{10,13}">
+                <small class="helper-text">Format: 081234567890 (10-13 digit)</small>
+              </div>
+            </div>
+            
+            <!-- Address Information Section -->
+            <div class="form-section">
+              <h5 class="section-title">
+                <i class="fas fa-map-marker-alt"></i>
+                Share Lokasi
+              </h5>
+              
+              <div class="form-group">
+                <label for="customerAddress">
+                  <i class="fas fa-home"></i>
+                  Alamat Lengkap *
+                </label>
+                <textarea id="customerAddress" name="alamat" rows="3" required 
+                          placeholder="Masukkan alamat lengkap calon pelanggan"></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="odpTerdekat">
+                  <i class="fas fa-network-wired"></i>
+                  ODP Terdekat *
+                </label>
+                <input type="text" id="odpTerdekat" name="odp_terdekat" placeholder="Contoh: ODP-001/ABC">
+                <small class="helper-text">Masukkan kode ODP terdekat dari lokasi</small>
+              </div>
+            </div>
+            
+            <!-- Sales Assignment Section -->
+            <div class="form-section">
+              <h5 class="section-title">
+                <i class="fas fa-user-tie"></i>
+                Penugasan Sales
+              </h5>
+              
+              <div class="form-group">
+                <label for="assignedSales">
+                  <i class="fas fa-user-check"></i>
+                  Nama Sales *
+                </label>
+                <input type="text" id="assignedSales" name="nama_sales" required
+                       placeholder="Masukkan nama sales">
+              </div>
+              
+              <div class="form-group">
+                <label for="visitStatus">
+                  <i class="fas fa-calendar-check"></i>
+                  Status Visit
+                </label>
+                <select id="visitStatus" name="visit">
+                  <option value="">Pilih Status</option>
+                  <option value="Visited">Visited</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Scheduled">Scheduled</option>
+                  <option value="Not Visited">Not Visited</option>
+                </select>
+              </div>
+            </div>
+            
+            <!-- Additional Information Section -->
+            <div class="form-section">
+              <h5 class="section-title">
+                <i class="fas fa-info-circle"></i>
+                Informasi Tambahan
+              </h5>
+              
+              <div class="form-group">
+                <label for="customerStatus">
+                  <i class="fas fa-flag"></i>
+                  Status Calon Pelanggan
+                </label>
+                <select id="customerStatus" name="status">
+                  <option value="">Pilih Status</option>
+                  <option value="Baru">Baru</option>
+                  <option value="Follow Up">Follow Up</option>
+                  <option value="Survey">Survey</option>
+                  <option value="Diterima">Diterima</option>
+                  <option value="Tidak Diterima">Tidak Diterima</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="notes">
+                  <i class="fas fa-sticky-note"></i>
+                  Catatan / Keterangan
+                </label>
+                <textarea id="notes" name="keterangan" rows="3" 
+                          placeholder="Catatan tambahan untuk calon pelanggan ini"></textarea>
+              </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancelAddCustomer">
+                <i class="fas fa-times"></i>
+                Batal
+              </button>
+              <button type="submit" class="btn btn-primary" id="saveCustomer">
+                <i class="fas fa-save"></i>
+                Simpan Calon Pelanggan
+              </button>
+            </div>
+          </form>
+        </section>
+        
+        <section class="content-grid">
+          <div class="table-section">
+            <div class="section-header">
+              <h3>Daftar Calon Pelanggan</h3>
+              <div class="table-filter-controls">
+                <div class="filter-buttons-group">
+                  <button id="btnTableShowAll" class="btn-filter btn-filter-all" title="Tampilkan semua data">
+                    <i class="fas fa-list"></i> Semua
+                  </button>
+                  <button id="btnTableShowSchool" class="btn-filter btn-filter-school" title="Tampilkan hanya sekolah">
+                    <i class="fas fa-graduation-cap"></i> Sekolah
+                  </button>
+                  <button id="btnTableShowNonSchool" class="btn-filter btn-filter-nonschool" title="Tampilkan non-sekolah">
+                    <i class="fas fa-building"></i> Non-Sekolah
+                  </button>
+                </div>
+                <button id="toggle-customer-form" class="btn-export">
+                  <i class="fas fa-plus"></i>
+                  Add Calon Pelanggan Baru
+                </button>
+              </div>
+            </div>
+            
+            <div class="table-scroll-container">
+              <div class="table-scroll-top" id="tableScrollTop">
+                <div class="table-scroll-content" id="tableScrollContent"></div>
+              </div>
+              <div class="table-container" id="tableContainer">
+                <table id="customerTable">
+                  <thead>
+                    <tr>
+                      <th>ODP TERDEKAT</th>
+                      <th>NAMA</th>
+                      <th>ALAMAT</th>
+                      <th>NO TELEPON</th>
+                      <th>NAMA SALES</th>
+                      <th>VISIT</th>
+                      <th>KETERANGAN</th>
+                      <th>STATUS</th>
+                      <th>KETERANGAN TAMBAHAN</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Customer rows will be populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Edit Data Calon Pelanggan</h2>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <input type="hidden" id="editRowIndex" />
+          
+          <div class="form-group">
+            <label for="editOdp">ODP Terdekat</label>
+            <input type="text" id="editOdp" name="odp_terdekat" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="editNama">Nama</label>
+            <input type="text" id="editNama" name="nama" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="editAlamat">Alamat</label>
+            <textarea id="editAlamat" name="alamat" rows="3" required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="editTelepon">No Telepon</label>
+            <input type="tel" id="editTelepon" name="no_telepon" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="editSales">Nama Sales</label>
+            <input type="text" id="editSales" name="nama_sales" required />
+          </div>
+          
+          <div class="form-group">
+            <label for="editVisit">Visit</label>
+            <select id="editVisit" name="visit" required>
+              <option value="">Pilih Status Visit</option>
+              <option value="Visited">Visited</option>
+              <option value="Pending">Pending</option>
+              <option value="Scheduled">Scheduled</option>
+              <option value="Not Visited">Not Visited</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="editKeterangan">Keterangan</label>
+            <textarea id="editKeterangan" name="keterangan" rows="3"></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="editStatus">Status</label>
+            <select id="editStatus" name="status" required>
+              <option value="">Pilih Status</option>
+              <option value="Diterima">Diterima</option>
+              <option value="Tidak Diterima">Tidak Diterima</option>
+              <option value="Pending">Pending</option>
+              <option value="Survey">Survey</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="editKeteranganTambahan">Keterangan Tambahan</label>
+            <textarea id="editKeteranganTambahan" name="keterangan_tambahan" rows="2"></textarea>
+          </div>
+          
+          <div class="modal-actions">
+            <button type="button" class="btn-cancel" onclick="closeEditModal()">Batal</button>
+            <button type="submit" class="btn-save">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="google-sheets-integration.js"></script>
+  <script src="google-sheets-crud.js"></script>
+  <script src="sidebar-manager.js"></script>
+  <script src="table-scrollbar-sync.js"></script>
+  <script src="script.js"></script>
+  <script src="school-data-filter.js"></script>
+
+  <script>
+    const svgWidth = 1200;
+    const pointsCount = 50;
+    const amplitude = 6;
+    const baseYPositions = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];
+    const paths = [];
+
+    function generatePoints(baseY, timeOffset) {
+      const points = [];
+      for (let i = 0; i <= pointsCount; i++) {
+        const x = (svgWidth / pointsCount) * i;
+        // Use sine wave with further reduced random noise for y
+        const y = baseY + Math.sin((i * 0.3) + timeOffset) * amplitude * (0.85 + Math.random() * 0.15);
+        points.push({ x, y });
+      }
+      return points;
+    }
+
+    function pointsToPath(points) {
+      let d = `M${points[0].x} ${points[0].y}`;
+      for (let i = 1; i < points.length; i++) {
+        const cpX = (points[i - 1].x + points[i].x) / 2;
+        const cpY = (points[i - 1].y + points[i].y) / 2;
+        d += ` Q${points[i - 1].x} ${points[i - 1].y} ${cpX} ${cpY}`;
+      }
+      return d;
+    }
+
+    function animate(time = 0) {
+      baseYPositions.forEach((baseY, index) => {
+        const points = generatePoints(baseY, time * 0.002 + index);
+        const pathData = pointsToPath(points);
+        paths[index].setAttribute('d', pathData);
+      });
+      requestAnimationFrame(animate);
+    }
+
+    for (let i = 1; i <= 12; i++) {
+      paths.push(document.getElementById(`line${i}`));
+    }
+
+    animate();
+  </script>
+
+  <script src="https://accounts.google.com/gsi/client" async defer onload="gisLoaded()"></script>
+  <script src="https://apis.google.com/js/api.js" async defer onload="gapiLoaded()"></script>
+</body>
+</html>

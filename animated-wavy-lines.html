@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Animated Wavy Lines</title>
+<style>
+  body {
+    margin: 0;
+    background: white;
+  }
+  svg {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+  }
+  path {
+    fill: none;
+    stroke: red;
+    stroke-width: 1;
+  }
+</style>
+</head>
+<body>
+<svg viewBox="0 0 1200 400" xmlns="http://www.w3.org/2000/svg" >
+  <path id="line1" />
+  <path id="line2" />
+  <path id="line3" />
+  <path id="line4" />
+  <path id="line5" />
+  <path id="line6" />
+  <path id="line7" />
+  <path id="line8" />
+  <path id="line9" />
+  <path id="line10" />
+  <path id="line11" />
+  <path id="line12" />
+<script>
+  const svgWidth = 1200;
+  const pointsCount = 50;
+  const amplitude = 6;
+  const baseYPositions = [30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330, 360];
+  const paths = [];
+
+  function generatePoints(baseY, timeOffset) {
+    const points = [];
+    for (let i = 0; i <= pointsCount; i++) {
+      const x = (svgWidth / pointsCount) * i;
+      // Use sine wave with further reduced random noise for y
+      const y = baseY + Math.sin((i * 0.3) + timeOffset) * amplitude * (0.85 + Math.random() * 0.15);
+      points.push({ x, y });
+    }
+    return points;
+  }
+
+  function pointsToPath(points) {
+    let d = `M${points[0].x} ${points[0].y}`;
+    for (let i = 1; i < points.length; i++) {
+      const cpX = (points[i - 1].x + points[i].x) / 2;
+      const cpY = (points[i - 1].y + points[i].y) / 2;
+      d += ` Q${points[i - 1].x} ${points[i - 1].y} ${cpX} ${cpY}`;
+    }
+    return d;
+  }
+
+  function animate(time = 0) {
+    baseYPositions.forEach((baseY, index) => {
+      const points = generatePoints(baseY, time * 0.002 + index);
+      const pathData = pointsToPath(points);
+      paths[index].setAttribute('d', pathData);
+    });
+    requestAnimationFrame(animate);
+  }
+
+  for (let i = 1; i <= 12; i++) {
+    paths.push(document.getElementById(`line${i}`));
+  }
+
+  animate();
+</script>
+</svg>
+</body>
+</html>

@@ -1,0 +1,169 @@
+/* Sales Sidebar Styles - Updated with Red & White Color Palette */
+
+:root {
+  /* Red & White Color Variables */
+  --primary-color: #b34747;
+  --primary-dark: #8f3a3a;
+  --secondary-color: #d47272;
+  --accent-color: #c45c5c;
+  --text-primary: #2d1a1a;
+  --text-secondary: #6b4c4c;
+  --text-muted: #8f6b6b;
+  --bg-primary: #faf5f5;
+  --bg-secondary: #ffffff;
+  --bg-dark: #2d1a1a;
+  --border-color: #e8d5d5;
+  --shadow-sm: 0 1px 2px 0 rgba(179, 71, 71, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(179, 71, 71, 0.1);
+}
+
+/* Animasi untuk sales baru */
+.sales-item {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 8px;
+  margin: 2px 0;
+  background: rgba(179, 71, 71, 0.05);
+  border: 1px solid rgba(179, 71, 71, 0.1);
+}
+
+.sales-item:hover {
+  background: rgba(179, 71, 71, 0.1);
+  transform: translateX(5px);
+  border-color: var(--primary-color);
+}
+
+.sales-item.active {
+  background: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.sales-item.active .sales-avatar {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Badge untuk sales baru */
+.sales-item.new-sales {
+  animation: slideIn 0.5s ease;
+  background: linear-gradient(135deg, rgba(179, 71, 71, 0.1), rgba(212, 114, 114, 0.1));
+  border-left: 3px solid var(--primary-color);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Tooltip untuk sales */
+.sales-item {
+  position: relative;
+}
+
+.sales-item::after {
+  content: attr(data-sales-name);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-dark);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  margin-left: 10px;
+  z-index: 1000;
+  border: 1px solid var(--primary-color);
+}
+
+.sales-item:hover::after {
+  opacity: 1;
+}
+
+/* Red-themed buttons */
+.btn-sales-red {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-sales-red:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+}
+
+/* Status indicators with red theme */
+.status-indicator.online {
+  background: var(--primary-color);
+  border: 2px solid white;
+}
+
+.status-indicator.offline {
+  background: var(--text-muted);
+  border: 2px solid white;
+}
+
+/* Responsive untuk mobile */
+@media (max-width: 768px) {
+  .sales-item {
+    padding: 8px 12px;
+  }
+  
+  .sales-item .sales-avatar {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Loading state untuk sales */
+.sales-loading {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary);
+}
+
+.sales-loading i {
+  animation: spin 1s linear infinite;
+  color: var(--primary-color);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Red-themed scrollbar */
+.sales-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sales-list::-webkit-scrollbar-track {
+  background: rgba(179, 71, 71, 0.1);
+  border-radius: 3px;
+}
+
+.sales-list::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+.sales-list::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
